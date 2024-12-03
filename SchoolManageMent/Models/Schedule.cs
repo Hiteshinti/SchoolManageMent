@@ -5,7 +5,7 @@ namespace SchoolManageMent.Models
 {
     public class Schedule
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int? Id { get; set; }
         [ForeignKey("Teacher")]

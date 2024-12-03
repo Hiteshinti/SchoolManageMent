@@ -20,17 +20,19 @@ namespace SchoolManageMent.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-           
+
+            modelBuilder.Entity<Subject>().HasOne(e => e.Student);
+
         }
 
-        public DbSet<Student> Students { get; set; }    
+        public DbSet<Student> Students { get; set; }
 
-        public DbSet<Teacher> Teachers { get; set; }    
+        public DbSet<Teacher> Teachers { get; set; }
 
-        public DbSet<Schedule> Schedules { get; set; }  
+        public DbSet<Schedule> Schedules { get; set; }
 
-        public DbSet<Marks> Marks { get; set; } 
+        public DbSet<Subject> Marks { get; set; }
 
-        
+
     }
 }

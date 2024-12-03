@@ -4,7 +4,7 @@ namespace SchoolManageMent.Models
 {
     public class Teacher
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

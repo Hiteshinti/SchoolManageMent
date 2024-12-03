@@ -234,33 +234,13 @@ namespace SchoolManageMent.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SchoolManageMent.Models.Marks", b =>
-                {
-                    b.Property<int?>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GradeMarks")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId")
-                        .IsUnique()
-                        .HasFilter("[StudentId] IS NOT NULL");
-
-                    b.ToTable("Marks");
-                });
-
             modelBuilder.Entity("SchoolManageMent.Models.Schedule", b =>
                 {
                     b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
@@ -286,10 +266,16 @@ namespace SchoolManageMent.Migrations
             modelBuilder.Entity("SchoolManageMent.Models.Student", b =>
                 {
                     b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -305,10 +291,37 @@ namespace SchoolManageMent.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("SchoolManageMent.Models.Subject", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<int?>("GradeMarks")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Marks");
+                });
+
             modelBuilder.Entity("SchoolManageMent.Models.Teacher", b =>
                 {
                     b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -374,15 +387,6 @@ namespace SchoolManageMent.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolManageMent.Models.Marks", b =>
-                {
-                    b.HasOne("SchoolManageMent.Models.Student", "Student")
-                        .WithOne("Marks")
-                        .HasForeignKey("SchoolManageMent.Models.Marks", "StudentId");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("SchoolManageMent.Models.Schedule", b =>
                 {
                     b.HasOne("SchoolManageMent.Models.Teacher", "Teacher")
@@ -392,10 +396,13 @@ namespace SchoolManageMent.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("SchoolManageMent.Models.Student", b =>
+            modelBuilder.Entity("SchoolManageMent.Models.Subject", b =>
                 {
-                    b.Navigation("Marks")
-                        .IsRequired();
+                    b.HasOne("SchoolManageMent.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SchoolManageMent.Models.Teacher", b =>

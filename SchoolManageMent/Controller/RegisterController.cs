@@ -11,7 +11,7 @@ namespace SchoolManageMent.Controller
     [ApiController]
     public class RegisterController : ControllerBase
      {
-        private readonly IUserRepository _userRepository;
+        //private readonly IUserRepository _userRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private  readonly ILogger<RegisterController> _logger;
@@ -19,13 +19,13 @@ namespace SchoolManageMent.Controller
 
         public RegisterController
         (
-            IUserRepository userRepository,
+            
             UserManager<AppUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterController> logger
         )
         {
-            _userRepository = userRepository;
+           
             _userManager = userManager;
             _roleManager = roleManager;
             _logger = logger;

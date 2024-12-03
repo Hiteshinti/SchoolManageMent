@@ -1,27 +1,49 @@
-﻿using SchoolManageMent.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolManageMent.Data;
 using SchoolManageMent.IRepository;
 using SchoolManageMent.Models;
 
 namespace SchoolManageMent.Repository
 {
-    public class StudentRepository:IStudentRepository
+    public class StudentRepository: IStudentRepository
     {
         private readonly ApplicationDbContext _context;
-       public StudentRepository(ApplicationDbContext applicationDbContext)
-       {
-            _context = applicationDbContext;
-       }
-
-        public Student GetStudent(int id)
+        public StudentRepository(ApplicationDbContext context) 
+        { 
+            _context = context;
+        }
+        public  bool AddStudent(Student student)
         {
-            return _context.Students.Where(x => x.Id == id).FirstOrDefault();
+            try
+            {
+                _context.Students.Add(student);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
-        public bool AddStudent(Student student)
+        public List<Student> GetStudents()
         {
-             _context.Students.Add(student); 
-             _context.SaveChanges();
-              return true;
+            return _context.Students.ToList();
+        }
+
+        public bool UpdateStudent(Student student)
+        {
+            try
+            {   
+                _context.Students.Update(student);
+                //_context.Entry(student).State = EntityState.Modified;
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

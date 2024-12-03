@@ -6,6 +6,10 @@ using SchoolManageMent.IRepository;
 using SchoolManageMent.Repository;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using SchoolManageMent.MiddileWare;
 
 
 
@@ -28,8 +32,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 
-builder.Services.AddTransient<IStudentRepository,StudentRepository>();  
-builder.Services.AddSingleton<IUserRepository,UserRepository>();
+builder.Services.AddTransient<IStudentRepository, StudentRepository>(); 
  builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -41,9 +44,32 @@ builder.Services.AddSingleton<IUserRepository,UserRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
+        ValidAudience = builder.Configuration["Jwt:ValidAudience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
+    };
+});
+
+builder.Services.AddTransient<CustomMiddileware>(); ;
 
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
+builder.Configuration.SetBasePath(app.Environment.ContentRootPath).
+  AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).
+  AddJsonFile($"appsettings.{app.Environment.EnvironmentName}.json", optional: true).AddEnvironmentVariables();
 
 
 // Configure the HTTP request pipeline.
@@ -51,6 +77,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
+
 app.UseDefaultFiles();
 app.UseStaticFiles(new StaticFileOptions()
 {
@@ -60,17 +87,18 @@ app.UseStaticFiles(new StaticFileOptions()
 
 app.UseRouting();
 
-app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 
-
+app.UseMiddleware<CustomMiddileware>();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute("default", "{controller=Login}/{action=Index}");
 });
 
 //app.MapRazorPages();
+
 
 app.Run();

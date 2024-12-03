@@ -4,8 +4,8 @@ namespace SchoolManageMent.IRepository
 {
     public interface IStudentRepository
     {
-        Student GetStudent(int id);
-        bool AddStudent(Student student);   
-             
+        bool AddStudent(Student student);
+        List<Student> GetStudents();
+        bool UpdateStudent(Student student);
     }
 }
