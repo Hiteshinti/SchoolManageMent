@@ -47,7 +47,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultCh allengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
 }).AddJwtBearer(options =>
 {
@@ -71,6 +71,7 @@ builder.Configuration.SetBasePath(app.Environment.ContentRootPath).
   AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).
   AddJsonFile($"appsettings.{app.Environment.EnvironmentName}.json", optional: true).AddEnvironmentVariables();
 
+//builder.Services.Configure<>(builder.Configuration.GetSection());
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -97,6 +98,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute("default", "{controller=Login}/{action=Index}");
 });
+
 
 //app.MapRazorPages();
 

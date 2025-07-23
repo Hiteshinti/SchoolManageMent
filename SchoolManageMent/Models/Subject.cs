@@ -14,7 +14,6 @@ namespace SchoolManageMent.Models
         public int? StudentId { get; set; }
         public string? SubjectName { get; set; }
         public int? GradeMarks { get; set; }
-
         public virtual Student Student { get; set; }
     }
 }
