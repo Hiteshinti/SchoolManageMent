@@ -12,7 +12,7 @@ using System.Text;
 namespace SchoolManageMent.Controller
 {
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController : Microsoft.AspNetCore.Mvc.Controller 
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -32,7 +32,7 @@ namespace SchoolManageMent.Controller
         [Route("Login/Index")]
         public IActionResult Index()
         {
-            return Ok();
+            return View();
         }
 
 
